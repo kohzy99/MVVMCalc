@@ -17,6 +17,10 @@ namespace MVVMCalc.ViewModel
         {
             this.CalculateTypes = CalculateTypeViewModel.Create();
             this.selectedCalculateType = this.CalculateTypes.First();
+
+            // 入力値の検証を行う
+            this.Lhs = string.Empty;
+            this.Rhs = string.Empty;
         }
 
         // 現在選択されている計算タイプ
@@ -32,24 +36,41 @@ namespace MVVMCalc.ViewModel
         }
 
         // 左辺
-        private double lhs;
-        public double Lhs
+        private string lhs;
+        public string Lhs
         {
             get { return this.lhs; }
             set
             {
                 this.lhs = value;
+                if (!this.IsDouble(value))
+                {
+                    this.SetError(nameof(Lhs), "数字を入力してください");
+                }
+                else
+                {
+                    this.ClearError(nameof(Lhs));
+                }
                 this.RaisePropertyChanged(nameof(Lhs));
             }
         }
+
         // 右辺
-        private double rhs;
-        public double Rhs
+        private string rhs;
+        public string Rhs
         {
             get { return this.rhs; }
             set
             {
                 this.rhs = value;
+                if (!this.IsDouble(value))
+                {
+                    this.SetError(nameof(Rhs), "数字を入力してください");
+                }
+                else
+                {
+                    this.ClearError(nameof(Rhs));
+                }
                 this.RaisePropertyChanged(nameof(Rhs));
             }
         }
@@ -63,6 +84,13 @@ namespace MVVMCalc.ViewModel
                 this.answer = value;
                 this.RaisePropertyChanged(nameof(Answer));
             }
+        }
+
+        // 引数がDouble型にキャストできるかチェックします
+        private bool IsDouble(string value)
+        {
+            var temp = default(double);
+            return double.TryParse(value, out temp);
         }
 
         // 計算処理を行うコマンド
@@ -82,13 +110,13 @@ namespace MVVMCalc.ViewModel
         {
             // 現在の入力値を元に計算を行う
             var calc = new Calculator();
-            this.Answer = calc.Execute(this.Lhs, this.Rhs, this.SelectedCalculateType.CalculateType);
+            this.Answer = calc.Execute(double.Parse(this.Lhs), double.Parse(this.Rhs), this.SelectedCalculateType.CalculateType);
         }
         // 実行可否判定
         private bool CanCalculateExecute()
         {
             // 「未選択」以外なら実行OK
-            return this.SelectedCalculateType.CalculateType != CalculateType.None;
+            return this.SelectedCalculateType.CalculateType != CalculateType.None && !this.HasError;
         }
 
     }

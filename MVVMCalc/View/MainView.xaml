@@ -21,6 +21,12 @@
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="10"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Mode=Self}}"/>
+                    <Setter Property="Background" Value="Pink"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="10"/>
@@ -47,9 +53,9 @@
         <Label Content="右辺値：" Grid.Row="2"/>
         <Label Content="計算結果：" Grid.Row="4"/>
         <!--左カラム-->
-        <TextBox Text="{Binding Lhs,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"/>
+        <TextBox Text="{Binding Lhs,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Column="1" Grid.Row="0"/>
         <ComboBox ItemsSource="{Binding CalculateTypes}" SelectedItem="{Binding SelectedCalculateType}" SelectedIndex="0" Grid.Column="1" Grid.Row="1"/>
-        <TextBox Text="{Binding Rhs,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2"/>
+        <TextBox Text="{Binding Rhs,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Column="1" Grid.Row="2"/>
         <Button Content="計算実行" Command="{Binding CalculateCommand}" Grid.Column="1" Grid.Row="3"/>
         <TextBlock Text="{Binding Answer}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"/>
     </Grid>
