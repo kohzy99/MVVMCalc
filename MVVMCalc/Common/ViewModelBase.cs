@@ -75,6 +75,7 @@ namespace MVVMCalc.Common
             }
         }
 
+        // 未使用
         public string Error => throw new NotImplementedException();
 
         #endregion
