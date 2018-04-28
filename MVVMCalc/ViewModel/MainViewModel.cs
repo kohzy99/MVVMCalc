@@ -10,7 +10,6 @@ namespace MVVMCalc.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-
         public IEnumerable<CalculateTypeViewModel> CalculateTypes { get; private set; }
 
         // コンストラクタ
