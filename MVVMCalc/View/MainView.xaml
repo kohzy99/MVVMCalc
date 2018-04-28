@@ -1,0 +1,56 @@
+﻿<Window x:Class="MVVMCalc.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MVVMCalc.View"
+        xmlns:vm="clr-namespace:MVVMCalc.ViewModel"
+        mc:Ignorable="d"
+        Title="簡単電卓" Width="300"
+        SizeToContent="Height"
+        SnapsToDevicePixels="True">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!--右カラム-->
+        <Label Content="左辺値："/>
+        <Label Content="計算方法：" Grid.Row="1"/>
+        <Label Content="右辺値：" Grid.Row="2"/>
+        <Label Content="計算結果：" Grid.Row="4"/>
+        <!--左カラム-->
+        <TextBox Text="{Binding Lhs,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"/>
+        <ComboBox ItemsSource="{Binding CalculateTypes}" SelectedItem="{Binding SelectedCalculateType}" SelectedIndex="0" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Text="{Binding Rhs,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2"/>
+        <Button Content="計算実行" Command="{Binding CalculateCommand}" Grid.Column="1" Grid.Row="3"/>
+        <TextBlock Text="{Binding Answer}" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"/>
+    </Grid>
+</Window>
