@@ -111,13 +111,58 @@ namespace MVVMCalc.ViewModel
             // 現在の入力値を元に計算を行う
             var calc = new Calculator();
             this.Answer = calc.Execute(double.Parse(this.Lhs), double.Parse(this.Rhs), this.SelectedCalculateType.CalculateType);
+
+            if (IsInvalidAnswer())
+            {
+                // 計算結果が実数の範囲から外れている場合はViewに通知する
+                this.ErrorMessenger.Raise(
+                    new Message("計算結果が実数の範囲を超えました。入力値を初期化しますか？"),
+                    m =>
+                    {
+                        // View から入力を初期化すると指定されて場合はプロパティの初期化を行う
+                        if (!(bool)m.Response)
+                        {
+                            return;
+                        }
+                        InitializeProperties();
+                    }
+                    );
+            }
+
         }
+
+        // プロパティの初期化を行う
+        private void InitializeProperties()
+        {
+            this.Lhs = string.Empty;
+            this.Rhs = string.Empty;
+            this.Answer = default(double);
+            this.SelectedCalculateType = this.CalculateTypes.First();
+        }
+
+        // Answer が有効な実数値か確認する
+        private bool IsInvalidAnswer()
+        {
+            return double.IsInfinity(this.Answer) || double.IsNaN(this.Answer);
+        }
+
         // 実行可否判定
         private bool CanCalculateExecute()
         {
             // 「未選択」以外なら実行OK
             return this.SelectedCalculateType.CalculateType != CalculateType.None && !this.HasError;
         }
+
+        #region Messenger 関連
+
+        // 計算結果にエラーがあったことを通知するメッセージを送信するメッセンジャー
+        private Messenger errorMessenger = new Messenger();
+        public Messenger ErrorMessenger
+        {
+            get { return errorMessenger; }
+        }
+
+        #endregion
 
     }
 }

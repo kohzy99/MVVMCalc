@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MVVMCalc.View"
+        xmlns:common="clr-namespace:MVVMCalc.Common"
         xmlns:vm="clr-namespace:MVVMCalc.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         mc:Ignorable="d"
         Title="簡単電卓" Width="300"
         SizeToContent="Height"
@@ -12,6 +15,11 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <common:MessageTrigger SourceObject="{Binding Path=ErrorMessenger}">
+            <common:ConfirmAction/>
+        </common:MessageTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Margin" Value="10"/>
